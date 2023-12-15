@@ -30,6 +30,9 @@ jobs:
         run: |
               npm update
               npm upgrade
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.0.0
+            
       - name: get 
         run: npm install --save json-to-plantuml
       - name: Generate umlpng
