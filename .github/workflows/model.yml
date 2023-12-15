@@ -32,6 +32,10 @@ jobs:
               npm upgrade
       - name: Setup Java JDK
         uses: actions/setup-java@v4.0.0
+        with:
+            distribution: 'oracle'
+            java-version: '21'
+            
             
       - name: get 
         run: npm install --save json-to-plantuml
