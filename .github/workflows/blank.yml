@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'  # Choisissez la version de Node.js que vous souhaitez utiliser
+
+      - name: Install json-to-plantuml
+        run: npm install -g json-to-plantuml
+
+      - name: Install Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'  # Choisissez la version de Java que vous souhaitez utiliser
+
+      - name: Generate umlpng
+        run: |
+          for i in ../../*.json; do
+            $(npm bin)/json-to-plantuml -f $i | java -jar $GITHUB_WORKSPACE/plantuml.jar -pipe > ${i%%.*}.png
+          done
+
+      - name: Display Files
+        run: ls -R
