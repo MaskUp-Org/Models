@@ -27,7 +27,9 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Hello, world!
+        run: |
+              npm update
+              npm upgrade
       - name: get 
         run: npm install --save json-to-plantuml
       - name: Generate umlpng
