@@ -35,5 +35,5 @@ jobs:
       - name: Generate umlpng
         run: |
           for i in ../../*.json; do
-            json-to-plantuml -f $i | java -jar $GITHUB_WORKSPACE/Models/plantuml.jar -pipe > $GITHUB_WORKSPACE/${i%%.*}.png
+            json-to-plantuml -f $i | java -jar $GITHUB_WORKSPACE/Models/plantuml.jar -pipe > $GITHUB_WORKSPACE/$(basename ${i%.json}).png
           done
