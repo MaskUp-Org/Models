@@ -38,7 +38,7 @@ jobs:
             
             
       - name: Setup JsonToPlantUML
-        run: npm install -g --save json-to-plantuml
+        run: npm install --save json-to-plantuml
       - name: Generate umlpng
         run: json-to-plantuml -f ./test.json
         #run: for i in ./*.json; do json-to-plantuml -f $i; done
