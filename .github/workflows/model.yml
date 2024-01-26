@@ -31,9 +31,14 @@ jobs:
               npm update
               npm upgrade
                     
-      - name: Generate Plantuml
+      - name: plantuml
+        id: plantuml
         uses: grassedge/generate-plantuml-action@v1.5
-
+        with:
+          path: example
+          message: "Render PlantUML files"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         #run: for i in ./*.json; do json-to-plantuml -f $i; done
       # Runs a set of commands using the runners shell
