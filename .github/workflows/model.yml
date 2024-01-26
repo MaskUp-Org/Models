@@ -38,7 +38,7 @@ jobs:
           path: .
           message: "Render PlantUML files"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PLANTUML }}
 
         #run: for i in ./*.json; do json-to-plantuml -f $i; done
       # Runs a set of commands using the runners shell
