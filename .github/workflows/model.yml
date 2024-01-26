@@ -45,4 +45,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           ls
+          echo "-----"
           ls ../
