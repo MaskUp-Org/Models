@@ -1,27 +1,27 @@
 @startuml maskup_general
-participant Masque
+participant Mask
 participant Smartphone
-participant Serveur
+participant Server
 participant API
-participant "Base de données" as BDD
+participant "Database" as DB
 
-Smartphone -> Masque: Connexion Bluetooth
-activate Masque
-Masque -> Smartphone: Confirmation de la connexion
-Smartphone -> API: Requête pour gérer le masque
+Smartphone -> Mask: Bluetooth connection request
+activate Mask
+Mask -> Smartphone: Bluetooth connection confirmation
+Smartphone -> API: Connection request
 activate API
-API -> Serveur: Requête pour accéder à la BDD
-activate Serveur
-Serveur -> BDD: Requête de lecture/écriture
-activate BDD
-BDD --> Serveur: Réponse de la BDD
-Serveur --> API: Réponse du serveur
-deactivate BDD
-deactivate Serveur
-API --> Smartphone: Réponse de l'API
+API -> Server: Server + DB Request
+activate Server
+Server -> DB: I/O Request
+activate DB
+DB --> Server: DB response
+Server --> API: Server response
+deactivate DB
+deactivate Server
+API --> Smartphone: API Response
 deactivate API
-Smartphone -> Masque: Instructions de contrôle (ouverture, vibrations, etc.)
-activate Masque
-Masque --> Smartphone: Confirmation de l'exécution des instructions
-deactivate Masque
+Smartphone -> Mask: Components Control
+activate Mask
+Mask --> Smartphone: Execution confirmation
+deactivate Mask
 @enduml
