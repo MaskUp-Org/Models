@@ -1,0 +1,27 @@
+@startuml maskup_general
+participant Masque
+participant Smartphone
+participant Serveur
+participant API
+participant "Base de données" as BDD
+
+Smartphone -> Masque: Connexion Bluetooth
+activate Masque
+Masque -> Smartphone: Confirmation de la connexion
+Smartphone -> API: Requête pour gérer le masque
+activate API
+API -> Serveur: Requête pour accéder à la BDD
+activate Serveur
+Serveur -> BDD: Requête de lecture/écriture
+activate BDD
+BDD --> Serveur: Réponse de la BDD
+Serveur --> API: Réponse du serveur
+deactivate BDD
+deactivate Serveur
+API --> Smartphone: Réponse de l'API
+deactivate API
+Smartphone -> Masque: Instructions de contrôle (ouverture, vibrations, etc.)
+activate Masque
+Masque --> Smartphone: Confirmation de l'exécution des instructions
+deactivate Masque
+@enduml
