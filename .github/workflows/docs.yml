@@ -12,12 +12,13 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v2
 
-      - name: Deploy docs
-        uses: mhausenblas/mkdocs-deploy-gh-pages@master
-        # Or use mhausenblas/mkdocs-deploy-gh-pages@nomaterial to build without the mkdocs-material theme
+      - name: Deploy MkDocs
+        uses: mhausenblas/mkdocs-deploy-gh-pages@1.26
+    
         env:
           GITHUB_TOKEN: ${{ secrets.MASKUP }}
           CUSTOM_DOMAIN: optionaldomain.com
+          CUSTOM_NAME: "Model"
           CONFIG_FILE: folder/mkdocs.yml
           EXTRA_PACKAGES: build-base
           # GITHUB_DOMAIN: github.myenterprise.com
