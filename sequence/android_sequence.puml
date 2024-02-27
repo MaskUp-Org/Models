@@ -1,0 +1,21 @@
+@startuml
+
+actor Utilisateur as user
+participant "Vue : MainActivity" as view
+participant "ViewModel : AltitudeViewModel" as viewModel
+participant "Service : MaskCommunicationService" as service
+participant "Modèle : UserSettings" as model
+participant "Repository : UserSettingsRepository" as repo
+
+user -> view : Choisit altitude
+view -> viewModel : modifierAltitude(1500)
+viewModel -> service : changerAltitude(1500)
+service -> model : setAltitude(1500)
+model -> repo : sauvegarderRéglages()
+repo --> model : Réglages sauvegardés
+model --> service : Altitude mise à jour
+service --> viewModel : Confirmation changement altitude
+viewModel --> view : Afficher confirmation
+view --> user : Montre confirmation à l'utilisateur
+
+@enduml
