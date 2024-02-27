@@ -1,0 +1,113 @@
+@startuml
+
+package "Model" {
+    class UserSettings {
+        +altitude: Int
+        +seuilBpm: Int
+    }
+
+    class HealthData {
+        +rythmeCardiaque: Int
+        +respiration: Int
+    }
+
+    class NavigationData {
+        +itinéraire: String
+    }
+}
+
+package "View" {
+    class AuthActivity {
+        +afficherAuthentification()
+    }
+
+    class MainActivity {
+        +afficherAccueil()
+    }
+
+    class NavigationActivity {
+        +afficherItinéraire()
+    }
+}
+
+package "ViewModel" {
+    class AuthViewModel {
+        +authentifierUtilisateur()
+    }
+
+    class AltitudeViewModel {
+        +modifierAltitude(altitude: Int)
+    }
+
+    class EmergencyViewModel {
+        +activerBoutonUrgence()
+    }
+
+    class NavigationViewModel {
+        +démarrerNavigation(itinéraire: String)
+    }
+
+    class MusicViewModel {
+        +jouerMusique()
+    }
+
+    class HealthMonitoringViewModel {
+        +surveillerSanté()
+    }
+}
+
+package "Services" {
+    class MaskCommunicationService {
+        +changerAltitude(altitude: Int)
+        +activerUrgence()
+    }
+
+    class HealthService {
+        +obtenirDonnéesSanté()
+    }
+
+    class NavigationService {
+        +obtenirItinéraire()
+    }
+
+    class AuthenticationService {
+        +authentifier(email: String, motDePasse: String)
+    }
+}
+
+package "Repository" {
+    class UserSettingsRepository {
+        +sauvegarderRéglages(utilisateur: UserSettings)
+        +chargerRéglages(): UserSettings
+    }
+
+    class HealthDataRepository {
+        +sauvegarderDonnéesSanté(données: HealthData)
+        +chargerDonnéesSanté(): HealthData
+    }
+
+    class NavigationRepository {
+        +sauvegarderItinéraire(données: NavigationData)
+        +chargerItinéraire(): NavigationData
+    }
+}
+
+AuthActivity --> AuthViewModel : utilise
+MainActivity --> AltitudeViewModel : utilise
+MainActivity --> EmergencyViewModel : utilise
+MainActivity --> NavigationViewModel : utilise
+MainActivity --> MusicViewModel : utilise
+MainActivity --> HealthMonitoringViewModel : utilise
+
+AuthViewModel --> AuthenticationService : utilise
+AltitudeViewModel --> MaskCommunicationService : utilise
+EmergencyViewModel --> MaskCommunicationService : utilise
+NavigationViewModel --> NavigationService : utilise
+MusicViewModel --> MaskCommunicationService : utilise
+HealthMonitoringViewModel --> HealthService : utilise
+
+MaskCommunicationService ..> UserSettingsRepository : dépend de
+HealthService ..> HealthDataRepository : dépend de
+NavigationService ..> NavigationRepository : dépend de
+
+@enduml
