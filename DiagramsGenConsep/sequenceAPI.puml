@@ -1,0 +1,33 @@
+@startuml
+
+actor Application
+participant API
+
+Application -> API : POST /utilisateurs (nom, prenom, email, motDePasse, numeroMasque)
+API -> Application : 201 Created (id)
+
+Application -> API : GET /utilisateurs/{id}
+API -> Application : 200 OK (utilisateur)
+
+Application -> API : PUT /utilisateurs/{id} (utilisateur)
+API -> Application : 200 OK
+
+Application -> API : DELETE /utilisateurs/{id}
+API -> Application : 204 No Content
+
+Application -> API : POST /parcours (utilisateur, date, duree, distance, points)
+API -> Application : 201 Created (id)
+
+Application -> API : GET /parcours/{id}
+API -> Application : 200 OK (parcours)
+
+Application -> API : PUT /parcours/{id} (parcours)
+API -> Application : 200 OK
+
+Application -> API : DELETE /parcours/{id}
+API -> Application : 204 No Content
+
+Application -> API : GET /masques/{numero}
+API -> Application : 200 OK (masque)
+
+@enduml

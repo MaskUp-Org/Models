@@ -1,0 +1,22 @@
+@startuml
+
+start
+
+:Ouvrir l'application;
+:GET dernière version du logiciel masque;
+:Réponse avec la dernière version;
+
+if (Les versions correspondent) then (true)
+  :Afficher un message "Le masque est à jour";
+else (false)
+  :Afficher un message "Une mise à jour est disponible";
+  :Télécharger la mise à jour;
+  :GET fichier de mise à jour;
+  :Réponse avec le fichier de mise à jour;
+  :Transmettre le fichier de mise à jour via Bluetooth;
+  :Installer la mise à jour;
+  :Afficher un message "La mise à jour est terminée";
+endif
+
+stop
+@enduml

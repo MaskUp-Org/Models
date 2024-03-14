@@ -1,0 +1,30 @@
+@startuml
+
+actor Utilisateur
+participant Application
+participant Masque
+
+Utilisateur -> Application : Ouvrir l'application
+Utilisateur -> Application : Créer un parcours
+Application -> Application : Ajouter les points et les ouvertures de masque
+Utilisateur -> Application : Démarrer le parcours
+Application -> Masque : Envoyer la commande de démarrage via Bluetooth
+Masque -> Masque : Démarrer le parcours
+Utilisateur -> Application : Écouter de la musique
+Application -> Masque : Transmettre la musique via Bluetooth
+Masque -> Utilisateur : Jouer la musique via les écouteurs à conduction osseuse
+
+loop Pendant le parcours
+  Application -> Application : Récupérer les données GPS
+  Application -> Application : Calculer les directions à prendre
+  Application -> Masque : Envoyer les instructions de direction via Bluetooth
+  Masque -> Utilisateur : Indiquer les directions à prendre via les vibreurs
+  Application -> Application : Enregistrer les temps et les niveaux de difficulté
+end
+
+Utilisateur -> Application : Terminer le parcours
+Application -> Masque : Envoyer la commande de fin via Bluetooth
+Masque -> Masque : Terminer le parcours
+Application -> Utilisateur : Afficher les temps et les niveaux de difficulté du parcours
+
+@enduml

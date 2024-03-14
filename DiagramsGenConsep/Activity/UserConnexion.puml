@@ -1,0 +1,17 @@
+@startuml
+
+start
+
+:Utilisateur renseigne ses informations;
+:Utilisateur renseigne le numéro de son masque;
+
+if (Les informations sont valides) then (true)
+  :Création du compte utilisateur;
+  :Enregistrement du masque;
+else (false)
+  :Affichage d'un message d'erreur;
+endif
+
+stop
+
+@enduml

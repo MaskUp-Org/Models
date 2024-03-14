@@ -1,0 +1,38 @@
+@startuml
+
+class Utilisateur {
+  -id: int
+  -nom: String
+  -prenom: String
+  -email: String
+  -motDePasse: String
+  -numeroMasque: String
+}
+
+class Parcours {
+  -id: int
+  -utilisateur: Utilisateur
+  -date: Date
+  -duree: int
+  -distance: int
+  -points: List<Point>
+}
+
+class Point {
+  -latitude: double
+  -longitude: double
+  -altitude: int
+  -ouvertureMasque: boolean
+}
+
+class Masque {
+  -id: int
+  -numero: String
+  -etat: String
+  -batterie: int
+}
+
+Utilisateur "1" -- "*" Parcours
+Parcours "1" -- "*" Point
+
+@enduml
