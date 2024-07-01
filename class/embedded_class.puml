@@ -1,0 +1,63 @@
+@startuml embedded_class
+
+package "Components" {
+    interface IComponent {
+        +run()
+        +stop()
+
+        +m_state : bool
+    }
+
+    class Vibrator {
+        +run()
+        +stop()
+
+        +m_state : bool
+    }
+
+    class BCHeadPhone {
+        +run()
+        +stop()
+
+        +m_state : bool
+    }
+
+    class Servomotor {
+        +run()
+        +stop()
+
+        +m_state : bool
+    }
+
+    class ESP_32 {
+
+        +m_pLeftBCHeadPhone : BCHeadPhone
+        +m_pRightBCHeadPhone : BCHeadPhone
+
+        +m_pLeftVibrator : Vibrator
+        +m_pRightVibrator : Vibrator
+
+        +m_pServomotor : Servomotor
+    }
+    
+}
+
+package "FileReader" {
+    class JsonFileReader {
+        +load()
+    }
+}
+
+package "Main" {
+    class Main {
+        +main()
+    }
+}
+
+Vibrator --|> IComponent
+Servomotor --|> IComponent
+BCHeadPhone --|> IComponent
+
+ESP_32 *--> BCHeadPhone
+ESP_32 *--> Vibrator
+ESP_32 *--> Servomotor

@@ -5,15 +5,16 @@ participant Server
 participant API
 participant "Database" as DB
 
-Smartphone -> Mask: Bluetooth connection request
-activate Mask
-Mask -> Smartphone: Bluetooth connection confirmation
+
 Smartphone -> API: Connection request
 activate API
 API -> Server: Server + DB Request
 activate Server
 Server -> DB: I/O Request
 activate DB
+Smartphone -> Mask: Bluetooth connection request
+activate Mask
+Mask -> Smartphone: Bluetooth connection confirmation
 DB --> Server: DB response
 Server --> API: Server response
 deactivate DB
