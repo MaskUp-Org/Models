@@ -23,10 +23,9 @@ package "Components" {
     }
 
     class Servomotor {
-        +run()
-        +stop()
+        +changePosition(inPosition: Position)
 
-        +m_state : bool
+        +m_position : Position
     }
 
     class ESP_32 {
@@ -38,6 +37,15 @@ package "Components" {
         +m_pRightVibrator : Vibrator
 
         +m_pServomotor : Servomotor
+    }
+
+    enum Position
+    {
+        Altitude_1000m,
+        Altitude_2000m,
+        Altitude_3000m,
+        Altitude_4000m,
+        Altitude_5000m
     }
     
 }
@@ -55,7 +63,6 @@ package "Main" {
 }
 
 Vibrator --|> IComponent
-Servomotor --|> IComponent
 BCHeadPhone --|> IComponent
 
 ESP_32 *--> BCHeadPhone
