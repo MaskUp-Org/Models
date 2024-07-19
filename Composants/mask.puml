@@ -1,0 +1,35 @@
+@startuml
+
+interface "Bluetooth" as BLE
+
+BLE .. [ESP32]
+
+() "Servomoteur" as SMT
+ESP32 ..> [SMT] : "Modifie l'altitude"
+
+() "Moteur vibrant droit" as MVT
+ESP32 ..> [MVT] : "Signale direction"
+
+() "Ecouteur à conduction osseuse droit" as ED 
+ESP32 ..> [ED]: "Émet Musique"
+
+() "Ecouteur à conduction osseuse gauche" as EG 
+ESP32 ..> [EG] : "Émet Musique"
+
+() "Moteur vibrant gauche" as MVG
+ESP32 ..> [MVG]: "Signale direction"
+
+() "Bouton d'arrêt d'urgence" as BAU
+[BAU] ..> ESP32 : IRQ
+
+Smartphone --> BLE
+
+note left of [ESP32] 
+Si IRQ, alors passe en état
+Arrêt d'urgence, l'altitude
+passe à 0m, et repasse en état
+Prêt à fonctionner.
+endnote
+
+
+@enduml
