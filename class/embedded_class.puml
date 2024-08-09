@@ -1,31 +1,38 @@
-@startuml embedded_class
-
+@startuml
 package "Components" {
     interface IComponent {
         +run()
         +stop()
 
-        +m_state : bool
+        +m_state : Enum
     }
 
     class Vibrator {
         +run()
         +stop()
 
-        +m_state : bool
+        +m_state : Enum
+    }
+
+    class EmergencyButton {
+        +run()
+        +stop()
+
+        +m_state : Enum
     }
 
     class BCHeadPhone {
         +run()
         +stop()
 
-        +m_state : bool
+        +m_state : Enum
     }
 
     class Servomotor {
         +changePosition(inPosition: Position)
 
         +m_position : Position
+        +m_state : Enum
     }
 
     class ESP_32 {
@@ -37,6 +44,8 @@ package "Components" {
         +m_pRightVibrator : Vibrator
 
         +m_pServomotor : Servomotor
+        +m_pEmergencyButton : EmergencyButton
+        +m_state : Enum
     }
 
     enum Position
@@ -48,6 +57,21 @@ package "Components" {
         Altitude_5000m
     }
     
+}
+
+package "State Machine" {
+    class StateMachine {
+        +m_pEsp : ESP_32
+
+        +m_pLeftBCHeadPhone : BCHeadPhone
+        +m_pRightBCHeadPhone : BCHeadPhone
+
+        +m_pLeftVibrator : Vibrator
+        +m_pRightVibrator : Vibrator
+
+        +m_pServomotor : Servomotor
+    }
+
 }
 
 package "FileReader" {
@@ -62,9 +86,12 @@ package "Main" {
     }
 }
 
+EmergencyButton --|> IComponent
 Vibrator --|> IComponent
 BCHeadPhone --|> IComponent
 
 ESP_32 *--> BCHeadPhone
+ESP_32 *--> EmergencyButton
 ESP_32 *--> Vibrator
 ESP_32 *--> Servomotor
+@enduml
