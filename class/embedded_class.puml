@@ -1,38 +1,110 @@
 @startuml
+
+package "Builders" {
+    interface IBuilder {
+        +reset ()
+        +build()
+    }
+
+    class StateMachineBuilder {
+        +m_pStateMachine : StateMachine
+        +m_FileReader : FileReader
+        +m_mandatoriesComponents : List <Components>
+
+        +reset()
+
+        +setMandatoriesComponents()
+        +assignLeftVibrator()
+        +assignRightVibrator()
+        +assignLeftBCHeadPhone()
+        +assignRightBCHeadPhone()
+        +assignServomotor()
+        +assignEmergencyButton()
+        +assignESP32()
+
+        +build()
+    }
+
+    class VibratorBuilder {
+        +m_pVibrator : Vibrator
+
+        +reset ()
+        +asssignSide(Side)
+        +build()
+
+    }
+
+    class BCHeadPhoneBuilder {
+        +m_pBCHeadPhone : BCHeadPhone
+
+        +reset ()
+        +asssignSide(Side)
+        +build()
+    }
+
+    class ServomotorBuilder {
+        +m_pServomotor : Servomotor
+
+        +reset ()
+        +build()
+    }
+
+    class EmeregencyButtonBuilder {
+        +m_pEmergencyButton : EmergencyButton
+
+        +reset ()
+        +build()
+    }
+
+    class ESP_32Builder {
+        m_pEsp32 : ESP_32
+
+        +reset ()
+        +buildLeftVibrator()
+        +buildRightVibrator()
+        +buildLeftBCHeadPhone()
+        +buildRightBCHeadPhone()
+        +buildEmergencyButton()
+        +buildServomotor()
+        +build()
+    }
+
+}
+
 package "Components" {
     interface IComponent {
         +run()
         +stop()
 
-        +m_state : Enum
+        +m_state : State
     }
 
     class Vibrator {
         +run()
         +stop()
 
-        +m_state : Enum
+        +m_state : State
     }
 
     class EmergencyButton {
         +run()
         +stop()
 
-        +m_state : Enum
+        +m_state : State
     }
 
     class BCHeadPhone {
         +run()
         +stop()
 
-        +m_state : Enum
+        +m_state : State
     }
 
     class Servomotor {
         +changePosition(inPosition: Position)
 
         +m_position : Position
-        +m_state : Enum
+        +m_state : State
     }
 
     class ESP_32 {
@@ -45,18 +117,54 @@ package "Components" {
 
         +m_pServomotor : Servomotor
         +m_pEmergencyButton : EmergencyButton
-        +m_state : Enum
+        +m_state : State
     }
+}
 
+package "Enums"
+{
+    enum Side
+    {
+        LEFT,
+        RIGHT
+    }
     enum Position
     {
-        Altitude_1000m,
-        Altitude_2000m,
-        Altitude_3000m,
-        Altitude_4000m,
-        Altitude_5000m
+        M1000,
+        M2000,
+        M3000,
+        M4000,
+        M5000
     }
     
+    enum State
+    {
+        WORKING,
+        CONFIGURING,
+        WAITING,
+        ERROR
+    }
+    
+    enum Priority {
+        EMERGENCY,
+        COMPONENT
+    }
+
+    enum FileType {
+        JSON,
+        YAML
+    }
+
+    enum Component {
+        ESP32,
+        LEFTBCHEADPHONE,
+        RIGHTBCHEADPHONE,
+        LEFTVIBRATOR,
+        RIGHTVIBRATOR,
+        EMERGENCYBUTTON,
+        SERVOMOTOR
+    }
+
 }
 
 package "State Machine" {
@@ -70,13 +178,36 @@ package "State Machine" {
         +m_pRightVibrator : Vibrator
 
         +m_pServomotor : Servomotor
+
+        +m_requestsList : List <RequestStateChange>
+
+        +changeState()
+
+        +refreshStatesOrder()
     }
+
+   class RequestStateChange {
+       +m_pOwner : T
+       +m_actualState : State
+       +m_PriorityOrder : Priority
+   }
 
 }
 
-package "FileReader" {
+package "File" {
+
+    interface FileReader {
+        +load()
+    }
+
+
+
     class JsonFileReader {
         +load()
+    }
+
+    class FileReaderFactory {
+        +getFileReader(FileType)
     }
 }
 
@@ -86,12 +217,54 @@ package "Main" {
     }
 }
 
+
+JsonFileReader --|> FileReader
+
+
 EmergencyButton --|> IComponent
 Vibrator --|> IComponent
 BCHeadPhone --|> IComponent
+
 
 ESP_32 *--> BCHeadPhone
 ESP_32 *--> EmergencyButton
 ESP_32 *--> Vibrator
 ESP_32 *--> Servomotor
+
+
+ESP_32 *--> State
+BCHeadPhone *--> State
+EmergencyButton *--> State
+Vibrator *--> State
+Servomotor *--> State
+RequestStateChange *--> State
+
+StateMachine *--> BCHeadPhone 
+StateMachine *--> EmergencyButton 
+StateMachine *--> Vibrator 
+StateMachine *--> Servomotor 
+StateMachine *--> RequestStateChange 
+
+RequestStateChange *--> Priority
+Servomotor *--> Position
+
+StateMachineBuilder *--> StateMachine
+StateMachineBuilder *--> FileReader
+StateMachineBuilder *--> Component
+
+ESP_32Builder *--> ESP_32
+BCHeadPhoneBuilder *--> BCHeadPhone
+EmeregencyButtonBuilder *--> EmergencyButton
+VibratorBuilder *--> Vibrator 
+ServomotorBuilder *--> Servomotor 
+
+StateMachineBuilder --|> IBuilder
+ESP_32Builder --|> IBuilder
+BCHeadPhoneBuilder --|> IBuilder
+EmeregencyButtonBuilder --|> IBuilder
+VibratorBuilder --|> IBuilder
+ServomotorBuilder --|> IBuilder
+
+
+
 @enduml

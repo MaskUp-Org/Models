@@ -1,0 +1,97 @@
+@startuml
+
+actor Mobile
+
+participant "Setup" as Setup
+
+
+participant "StateMachine" as StateMachine
+participant "JsonFileReader" as JsonFileReader
+
+participant "ESP_32" as ESP_32
+participant "Left BCHeadPhone" as LeftBCHeadPhone
+participant "Right BCHeadPhone" as RightBCHeadPhone
+participant "Left Vibrator" as LeftVibrator
+participant "Right Vibrator" as RightVibrator
+participant "Servomotor" as Servomotor
+participant "EmergencyButton" as EmergencyButton
+
+participant "Main Loop" as MainLoop
+group "Setup"
+    Setup -> StateMachine : create
+    StateMachine -> JsonFileReader : loadMandatories()
+    Setup -> StateMachine : ask for mandatories components
+    StateMachine --> Setup : returns  a list of components required to run the mask
+
+    Setup -> LeftBCHeadPhone : create if mandatory
+    LeftBCHeadPhone --> StateMachine : ask for WAITING state
+    Setup -> RightBCHeadPhone : create if mandatory
+    RightBCHeadPhone --> StateMachine : ask for WAITING state
+    Setup -> LeftVibrator : create if mandatory
+    LeftVibrator --> StateMachine : ask for WAITING state
+    Setup -> RightVibrator : create if mandatory
+    RightVibrator --> StateMachine : ask for WAITING state
+    Setup -> Servomotor : create if mandatory
+    Servomotor --> StateMachine : ask for WAITING state
+    Setup -> EmergencyButton : create if mandatory
+    EmergencyButton --> StateMachine : ask for WAITING state
+
+    StateMachine -> LeftBCHeadPhone : Switch state to WAITING
+    StateMachine -> RightBCHeadPhone : Switch state to WAITING
+    StateMachine -> LeftVibrator : Switch state to WAITING
+    StateMachine -> RightVibrator : Switch state to WAITING
+    StateMachine -> Servomotor : Switch state to WAITING
+    StateMachine -> EmergencyButton : Switch state to WAITING
+
+end
+
+
+group "Loop" 
+    Mobile -> Main : Action
+    Main -> Main : prepare the State Machine Request
+    Main -> StateMachine : Send Standard Rrequest
+    StateMachine -> StateMachine : Save Request in Standard queue 
+
+    EmergencyButton -> Main : Send IRQ
+    Main -> Main : prepare the State Machine Request
+    Main -> StateMachine : Send Emergency Request
+    StateMachine -> StateMachine : Save Request in Emergency queue 
+
+
+
+    StateMachine -> Component : run onCalled()
+    Component --> StateMachine : ask for WORKING state
+
+
+    note left
+    Component can be :
+    LeftBCHeadPhone 
+    RightBCHeadPhone 
+    LeftVibrator
+    RightVibrator
+    Servomotor
+    based on queues request
+    end note
+
+    StateMachine -> LeftBCHeadPhone : Switch state to WORKING
+    StateMachine -> RightBCHeadPhone : Switch state to WORKING
+    StateMachine -> LeftVibrator : Switch state to WORKING
+    StateMachine -> RightVibrator : Switch state to WORKING
+    StateMachine -> Servomotor : Switch state to WORKING
+    StateMachine -> EmergencyButton : Switch state to WORKING
+
+    StateMachine -> Component : run onCalled()
+    Component -> Component : do()
+    Component --> StateMachine : ask for WAITING state
+
+    StateMachine -> LeftBCHeadPhone : Switch state to WAITING
+    StateMachine -> RightBCHeadPhone : Switch state to WAITING
+    StateMachine -> LeftVibrator : Switch state to WAITING
+    StateMachine -> RightVibrator : Switch state to WAITING
+    StateMachine -> Servomotor : Switch state to WAITING
+    StateMachine -> EmergencyButton : Switch state to WAITING
+
+    StateMachine -> StateMachine : Remove the Request
+
+end
+@enduml
